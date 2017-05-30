@@ -26,7 +26,7 @@ Now, with the generated the two files, you can enable SSL on your *WEB_HOOK_DOMA
 
 ## Set the Webhook
 
-Now, upload the code into *WEB_HOOK_URL* and then, you can set the webhook. If your SSL certificate is self signed, you have to upload the certificate as well:
+Now, upload the code (just *webhook.php*!) into *WEB_HOOK_URL* and then, you can set the webhook. If your SSL certificate is self signed, you have to upload the certificate as well:
 
 ```
 curl -F "url=WEB_HOOK_URL" -F "certificate=@certificate.crt" \
