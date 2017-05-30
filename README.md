@@ -4,16 +4,11 @@ This is a (very very) Simple Telegram Bot Webhook Example in PHP. It just extrac
 To use this, you should follow the following steps:
 
 ## Create a Telegram Bot
-Say hello to *BotFather* and create a boy.
-
-Contact @BotFather in telegram and say:
-
-Contact @BotFather in telegram and say:
+Say hello to *BotFather* and create a boy! Contact @BotFather in telegram and say:
 
 ```
 /newbot
 ```
-
 and follow the wizard. In the end, you will have a bot created and a secret token which you can use to access the bot.
 (the [BOT_KEY] constant should be saved in webhook.php).
 
