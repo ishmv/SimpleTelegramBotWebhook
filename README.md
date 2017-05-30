@@ -1,5 +1,5 @@
 # SimpleTelgramBotWebhook
-This is a (very very) Simple Telegram Bot Webhook Example in PHP. It just extract the message text and reply sender the same text. 
+This is a (very very) Simple Telegram Bot Webhook Example in PHP. It just extracts the message text and reply sender the same text. 
 
 To use this, you should follow the following steps:
 
@@ -8,7 +8,11 @@ Say hello to *BotFather* and create a boy.
 
 Contact @BotFather in telegram and say:
 
+Contact @BotFather in telegram and say:
+
+```
 /newbot
+```
 
 and follow the wizard. In the end, you will have a bot created and a secret token which you can use to access the bot.
 (the [BOT_KEY] constant should be saved in webhook.php).
@@ -26,14 +30,6 @@ openssl req -newkey rsa:2048 -sha256 -nodes -keyout certificate.key -x509 \
 Now, with the generated the two files, you can enable SSL on your *WEB_HOOK_DOMAIN*.
 
 ## Set the Webhook
-
-Contact @BotFather in telegram and say:
-
-```
-/newbot
-```
-
-and follow the wizard.
 
 Now, upload the code into *WEB_HOOK_URL* and then, you can set the webhook. If your SSL certificate is self signed, you have to upload the certificate as well:
 
