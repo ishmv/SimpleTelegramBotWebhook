@@ -3,7 +3,7 @@ This is a (very very) Simple Telegram Bot Webhook Example in PHP. It just extrac
 
 To use this, you should follow the following steps:
 
-## Create a Telegram Bot
+### Create a Telegram Bot
 Say hello to *BotFather* and create a boy! Contact @BotFather in telegram and say:
 
 ```
@@ -12,26 +12,27 @@ Say hello to *BotFather* and create a boy! Contact @BotFather in telegram and sa
 and follow the wizard. In the end, you will have a bot created and a secret token which you can use to access the bot.
 (the [BOT_KEY] constant should be saved in webhook.php).
 
-## Prepare for secure connection
+### Prepare for secure connection
 Telegrom bot webhooks should be in secure places and you should have a website enabled with HTTPS. So, you need to buy a valid SSL certificate or -the cheaper way- create a self signed SSL certificates and fortunately, Telegrom support self signed certificates.
 
 To create a self signed SSL certificate, you can use openssl. In linux, do the following (assuming that your *WEB_HOOK_URL* is in *WEB_HOOK_DOMAIN*):
 
 ```
 openssl req -newkey rsa:2048 -sha256 -nodes -keyout certificate.key -x509 \
-    -days 365  -out certificate.crt -subj "/C=IT/ST=state/L=location/O=description/CN=WEB_HOOK_DOMAIN"
+    -days 365  -out certificate.crt \
+    -subj "/C=IT/ST=state/L=location/O=description/CN=WEB_HOOK_DOMAIN"
 ```
 
 Now, with the generated the two files, you can enable SSL on your *WEB_HOOK_DOMAIN*.
 
-## Set the Webhook
+### Set the Webhook
 
-Now, upload the code (just *webhook.php*!) into *WEB_HOOK_URL* and then, you can set the webhook. If your SSL certificate is self signed, you have to upload the certificate as well:
+Upload the code (just *webhook.php*!) into *WEB_HOOK_URL* and then, you can set the webhook. It is suggested to use a secret key that only you and telegram know in the web hook url, so the url would contains "webhook.php?t=[SECRET_KEY]". This way, you can avoid accessing the hook by others). If your SSL certificate is self signed, you have to upload the certificate as well. So, do the following:
 
 ```
 curl -F "url=WEB_HOOK_URL" -F "certificate=@certificate.crt" \
     https://api.telegram.org/bot[BOT_KEY]/setWebhook
 ```
 
-## Ready to go!
+### Ready to go!
 Now everything is ready and you can use your Bot.
