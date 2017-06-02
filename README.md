@@ -1,4 +1,4 @@
-# SimpleTelgramBotWebhook
+# SimpleTelegramBotWebhook
 This is a (very very) Simple Telegram Bot Webhook Example in PHP. It just extracts the message text and reply sender the same text. If the message contains a file (a document, photo, audio or video), it replies the file with caption you entered. If you reply a previously sent file, you can also change the caption of file.
 
 To use this, you should follow the following steps:
