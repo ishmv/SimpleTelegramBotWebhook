@@ -111,6 +111,15 @@ $chatId      = $data->message->chat->id;
 //Reply to Telegram: It's OK!
 echo json_encode(array("ok"=> true));
 
+if(isset($data->message->reply_to_message))
+{
+   //If the message is reply to a previous message -> just change the caption
+   $caption = $data->message->text;
+   $data->message = $data->message->reply_to_message;
+   $data->message->caption = $caption;
+}
+
+
 if(isset($data->message->document))
 {
     $file_id = $data->message->document->file_id;
