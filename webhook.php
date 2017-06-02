@@ -3,7 +3,6 @@
 define("BOT_KEY", "[BOT_KEY]");
 define("SECRET_KEY", "[SECRET_KEY]");
 
-
 if(!isset($_GET["t"]) || $_GET["t"] != SECRET_KEY)
 {
     //avoid invalid access
@@ -11,14 +10,9 @@ if(!isset($_GET["t"]) || $_GET["t"] != SECRET_KEY)
     die;
 }
 
-function Send_Telegram_Message($chatId, $text)
+function TelegramAPI($post_fields, $method)
 {
-	$postdata = http_build_query(
-	    array(
-		"text" => $text,
-		"chat_id" => $chatId
-	    )
-	);
+       $postdata = http_build_query($post_fields);
 	$opts = array("http" =>
 	    array(
 		"method"  => "POST",
@@ -27,9 +21,72 @@ function Send_Telegram_Message($chatId, $text)
 	    )
 	);
 	$context  = stream_context_create($opts);
-	$result = file_get_contents("https://api.telegram.org/bot".BOT_KEY."/sendMessage", false, $context);
+	$result = file_get_contents("https://api.telegram.org/bot".BOT_KEY."/$method", false, $context);
 }
 
+function Forward_Telegram_Message($chatId, $message_id)
+{
+	$data = array(
+		"chat_id" => $chatId,
+		"from_chat_id" => $chatId,
+		"message_id" => $message_id
+	    );
+	TelegramAPI($data, "forwardMessage");
+}
+
+function Send_Telegram_Photo($chatId, $photo_id, $caption)
+{
+       $data = array(
+		"chat_id" => $chatId,
+		"photo" => $photo_id
+	    );
+        if($caption != null)
+            $data ["caption"] = $caption;
+	TelegramAPI($data, "sendPhoto");
+}
+
+function Send_Telegram_Video($chatId, $video_id, $caption)
+{
+       $data = array(
+		"chat_id" => $chatId,
+		"video" => $video_id
+	    );
+        if($caption != null)
+            $data ["caption"] = $caption;
+	TelegramAPI($data, "sendVideo");
+}
+
+function Send_Telegram_Audio($chatId, $audio_id, $caption)
+{
+       $data = array(
+		"chat_id" => $chatId,
+		"audio" => $audio_id
+	    );
+        if($caption != null)
+            $data ["caption"] = $caption;
+	TelegramAPI($data, "sendAudio");
+}
+
+function Send_Telegram_File($chatId, $file_id, $caption)
+{
+	$data = array(
+		"chat_id" => $chatId,
+		"document" => $file_id
+	    );
+        if($caption != null)
+            $data ["caption"] = $caption;
+
+	TelegramAPI($data, "sendDocument");
+}
+
+function Send_Telegram_Message($chatId, $text)
+{
+	$data = array(
+		"text" => $text,
+		"chat_id" => $chatId
+	    );
+	TelegramAPI($data, "sendMessage");
+}
 
 function Send_Telegram_Message_CURL($chatId, $text)
 {
@@ -42,18 +99,56 @@ function Send_Telegram_Message_CURL($chatId, $text)
 	curl_close ($ch);
 	return $server_output;
 }
-
 //Extract posted data
 $data = json_decode(file_get_contents("php://input"));
 
 //Find text of message
 $messageText = $data->message->text;
+$messageId   = $data->message->message_id;
 //Find Chat id
 $chatId      = $data->message->chat->id;
 
 //Reply to Telegram: It's OK!
 echo json_encode(array("ok"=> true));
 
-//Send_Telegram_Message_CURL($chatId,$messageText);
-Send_Telegram_Message($chatId,$messageText);
+if(isset($data->message->document))
+{
+    $file_id = $data->message->document->file_id;
+    if(isset($data->message->caption))
+       $caption = $data->message->caption;
+    else
+       $caption = null;
+    Send_Telegram_File($chatId,$file_id,$caption);
+}
+else if(isset($data->message->photo))
+{
+    $file_id = $data->message->photo[0]->file_id;
+    if(isset($data->message->caption))
+       $caption = $data->message->caption;
+    else
+       $caption = null;
+    Send_Telegram_Photo($chatId,$file_id, $caption);
+}
+else if(isset($data->message->video))
+{
+    $file_id = $data->message->video->file_id;
+    if(isset($data->message->caption))
+       $caption = $data->message->caption;
+    else
+       $caption = null;
+    Send_Telegram_Video($chatId,$file_id, $caption);
+}
+else if(isset($data->message->audio))
+{
+    $file_id = $data->message->audio->file_id;
+    if(isset($data->message->caption))
+       $caption = $data->message->caption;
+    else
+       $caption = null;
+    Send_Telegram_Audio($chatId,$file_id, $caption);
+}
+else
+{
+    Send_Telegram_Message($chatId,$messageText);
+}
 ?>
